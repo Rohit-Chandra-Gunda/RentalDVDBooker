@@ -1,0 +1,17 @@
+syntax = "proto3";
+package protobuffs;
+option go_package = "./;protobuffs";
+
+service Booker {
+    rpc BookDvd (BookingRequest) returns (BookingResponse) {}
+}
+
+message BookingRequest {
+    string userId = 1;
+    string dvdId = 2;
+}
+
+message BookingResponse {
+    bool success = 1;
+    string bookingId = 2;
+}
