@@ -4,13 +4,17 @@ option go_package = "./;protobuffs";
 
 service CancelBooking {
     rpc CancelBooking (CancelRequest) returns (CancelResponse) {}
+    rpc CancelSpecificBooking (CancelSpecificRequest) returns (CancelSpecificResponse) {}
 }
 
+me
+
 message CancelRequest {
-    string bookingId = 1;
+    uint64 bookingId = 1;
 }
 
 message CancelResponse {
-    string bookingId = 1;
+    uint64 bookingId = 1;
     bool success = 2;
+    string errorMsg = 3;
 }
