@@ -7,15 +7,19 @@ import (
 )
 
 var bookingList = []*models.Booking{
-	&models.Booking{UserId: 1, DvdId: 1, BookingId: 1, Status: true},
-	&models.Booking{UserId: 1, DvdId: 2, BookingId: 2, Status: true},
-	&models.Booking{UserId: 2, DvdId: 1, BookingId: 3, Status: true},
-	&models.Booking{UserId: 2, DvdId: 2, BookingId: 4, Status: false},
+	{UserId: 1, DvdId: 1, BookingId: 1, Status: true},
+	{UserId: 1, DvdId: 2, BookingId: 2, Status: true},
+	{UserId: 2, DvdId: 1, BookingId: 3, Status: true},
+	{UserId: 2, DvdId: 2, BookingId: 4, Status: false},
 }
 
 var nextBookingId uint64 = 5
 
-func getUserBookings(userId uint64) []*models.Booking {
+func GetUserBookings(userId uint64) ([]*models.Booking, error) {
+	if isActive, err := IsActiveUser(userId); !isActive {
+		return []*models.Booking{}, err
+	}
+
 	userBookings := []*models.Booking{}
 
 	for _, booking := range bookingList {
@@ -24,39 +28,34 @@ func getUserBookings(userId uint64) []*models.Booking {
 		}
 	}
 
-	return userBookings
+	return userBookings, nil
 }
 
-func getBooking(bookingId uint64) (*models.Booking, error) {
-	for _, booking := range bookingList {
-		if booking.BookingId == bookingId {
-			return booking, nil
-		}
+func GetBooking(userId, dvdId uint64) (*models.Booking, error) {
+	if isActive, err := IsActiveUser(userId); !isActive {
+		return nil, err
 	}
 
-	err := errors.New("No booking found with the given id")
-	return nil, err
-}
+	if isAvailable, err := IsDvdAvailable(dvdId); !isAvailable {
+		return nil, err
+	}
 
-func getSpecificBooking(userId, dvdId uint64) (*models.Booking, error) {
 	for _, booking := range bookingList {
 		if booking.UserId == userId && booking.DvdId == dvdId && booking.Status {
 			return booking, nil
 		}
 	}
 
-	err := errors.New("No booking found with the given id")
+	err := errors.New("No active booking found with the user id:" + strconv.FormatUint(userId, 10) + " and dvd id:" + strconv.FormatUint(userId, 10))
 	return nil, err
 }
 
-func AddBooking(dvdId, userId uint64) (uint64, error) {
-	userBookings := getUserBookings(userId)
+func AddBooking(userId, dvdId uint64) (uint64, error) {
+	booking, err := GetBooking(userId, dvdId)
 
-	for _, booking := range userBookings {
-		if booking.DvdId == dvdId {
-			err := errors.New("There is an existing booking with userId:" + strconv.FormatUint(userId, 10) + " and dvdId:" + strconv.FormatUint(dvdId, 10))
-			return 0, err
-		}
+	if err == nil {
+		err := errors.New("There is an existing booking with user id:" + strconv.FormatUint(userId, 10) + " and dvd id:" + strconv.FormatUint(dvdId, 10))
+		return booking.BookingId, err
 	}
 
 	bookingId := nextBookingId
@@ -66,24 +65,8 @@ func AddBooking(dvdId, userId uint64) (uint64, error) {
 	return bookingId, nil
 }
 
-func CancelBooking(bookingId uint64) (bool, error) {
-	booking, err := getBooking(bookingId)
-
-	if err == nil {
-		if !booking.Status {
-			err = errors.New("The booking with bookingId:" + strconv.FormatUint(bookingId, 10) + " is already cancelled")
-			return false, err
-		}
-
-		booking.Status = false
-		return true, nil
-	} else {
-		return false, err
-	}
-}
-
-func CancelSpecificBooking(userId, dvdId uint64) (bool, error) {
-	booking, err := getSpecificBooking(userId, dvdId)
+func CancelBooking(userId, dvdId uint64) (bool, error) {
+	booking, err := GetBooking(userId, dvdId)
 
 	if err == nil {
 		booking.Status = false
