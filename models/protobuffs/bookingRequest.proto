@@ -7,12 +7,9 @@ service Booker {
 }
 
 message BookingRequest {
-    uint64 userId = 1;
-    uint64 dvdId = 2;
+    BasicRequest basicRequest = 1;
 }
 
 message BookingResponse {
-    bool success = 1;
-    uint64 bookingId = 2;
-    string errorMsg = 3;
+    BasicResponse basicResponse = 1;
 }

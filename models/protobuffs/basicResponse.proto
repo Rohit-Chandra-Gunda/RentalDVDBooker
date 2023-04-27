@@ -1,0 +1,9 @@
+syntax = "proto3";
+package protobuffs;
+option go_package = "./;protobuffs";
+
+message BasicResponse {
+    bool success = 1;
+    uint64 bookingId = 2;
+    string errorMsg = 3;
+}
