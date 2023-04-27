@@ -1,6 +1,7 @@
 package server
 
 import (
+	"RentalDVDBooker/dao"
 	"RentalDVDBooker/models/protobuffs"
 	"context"
 
@@ -16,6 +17,10 @@ type BookerServer struct{}
 
 func (s *BookerServer) BookDvd(ctx context.Context,
 	request *protobuffs.BookingRequest) (*protobuffs.BookingResponse, error) {
+	userId := request.GetUserId
+	dvdId := request.GetDvdId
+
+	bookingId, err := dao.AddBooking(userId, dvdId)
 
 }
 
