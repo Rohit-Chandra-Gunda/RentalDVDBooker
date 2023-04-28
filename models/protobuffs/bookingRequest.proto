@@ -1,6 +1,8 @@
 syntax = "proto3";
 package protobuffs;
 option go_package = "./;protobuffs";
+import "basicRequest.proto";
+import "basicResponse.proto";
 
 service Booker {
     rpc BookDvd (BookingRequest) returns (BookingResponse) {}

@@ -2,6 +2,8 @@ syntax = "proto3";
 package protobuffs;
 option go_package = "./;protobuffs";
 
+//go:generate protoc -I ./models/protobuffs --go_out=./models/protobuffs --go-grpc_out=./models/protobuffs ./models/protobuffs/basicRequest.proto
+
 message BasicResponse {
     bool success = 1;
     uint64 bookingId = 2;
