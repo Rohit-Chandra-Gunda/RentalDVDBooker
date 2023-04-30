@@ -39,6 +39,22 @@ func (s *BookerServer) BookDvd(ctx context.Context,
 type CancelBookingServer struct{}
 
 func (s *CancelBookingServer) CancelBooking(ctx context.Context,
-	request protobuffs.CancelRequest) (*protobuffs.CancelResponse, error) {
+	request *protobuffs.CancelRequest) (*protobuffs.CancelResponse, error) {
+	userId := request.GetBasicRequest().GetUserId()
+	dvdId := request.GetBasicRequest().GetDvdId()
 
+	bookingId, err := dao.CancelBooking(userId, dvdId)
+	response := protobuffs.CancelResponse{}
+	basicResponse := protobuffs.BasicResponse{}
+
+	if err != nil {
+		basicResponse.ErrorMsg = err.Error()
+		basicResponse.Success = false
+	} else {
+		basicResponse.Success = true
+		basicResponse.BookingId = bookingId
+	}
+
+	response.BasicResponse = &basicResponse
+	return &response, err
 }
