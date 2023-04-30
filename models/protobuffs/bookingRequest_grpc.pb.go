@@ -51,7 +51,6 @@ func (c *bookerClient) BookDvd(ctx context.Context, in *BookingRequest, opts ...
 // for forward compatibility
 type BookerServer interface {
 	BookDvd(context.Context, *BookingRequest) (*BookingResponse, error)
-	mustEmbedUnimplementedBookerServer()
 }
 
 // UnimplementedBookerServer must be embedded to have forward compatible implementations.
@@ -61,7 +60,6 @@ type UnimplementedBookerServer struct {
 func (UnimplementedBookerServer) BookDvd(context.Context, *BookingRequest) (*BookingResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method BookDvd not implemented")
 }
-func (UnimplementedBookerServer) mustEmbedUnimplementedBookerServer() {}
 
 // UnsafeBookerServer may be embedded to opt out of forward compatibility for this service.
 // Use of this interface is not recommended, as added methods to BookerServer will

@@ -51,6 +51,14 @@ func GetBooking(userId, dvdId uint64) (*models.Booking, error) {
 }
 
 func AddBooking(userId, dvdId uint64) (uint64, error) {
+	if isActive, err := IsActiveUser(userId); !isActive {
+		return 0, err
+	}
+
+	if isAvailable, err := IsDvdAvailable(dvdId); !isAvailable {
+		return 0, err
+	}
+
 	booking, err := GetBooking(userId, dvdId)
 
 	if err == nil {
@@ -65,13 +73,13 @@ func AddBooking(userId, dvdId uint64) (uint64, error) {
 	return bookingId, nil
 }
 
-func CancelBooking(userId, dvdId uint64) (bool, error) {
+func CancelBooking(userId, dvdId uint64) (uint64, error) {
 	booking, err := GetBooking(userId, dvdId)
 
 	if err == nil {
 		booking.Status = false
-		return true, nil
+		return booking.BookingId, nil
 	} else {
-		return false, err
+		return 0, err
 	}
 }

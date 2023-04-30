@@ -51,7 +51,6 @@ func (c *cancelBookingClient) CancelBooking(ctx context.Context, in *CancelReque
 // for forward compatibility
 type CancelBookingServer interface {
 	CancelBooking(context.Context, *CancelRequest) (*CancelResponse, error)
-	mustEmbedUnimplementedCancelBookingServer()
 }
 
 // UnimplementedCancelBookingServer must be embedded to have forward compatible implementations.
@@ -61,7 +60,6 @@ type UnimplementedCancelBookingServer struct {
 func (UnimplementedCancelBookingServer) CancelBooking(context.Context, *CancelRequest) (*CancelResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CancelBooking not implemented")
 }
-func (UnimplementedCancelBookingServer) mustEmbedUnimplementedCancelBookingServer() {}
 
 // UnsafeCancelBookingServer may be embedded to opt out of forward compatibility for this service.
 // Use of this interface is not recommended, as added methods to CancelBookingServer will
