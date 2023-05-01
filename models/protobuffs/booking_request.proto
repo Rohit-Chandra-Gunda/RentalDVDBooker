@@ -3,7 +3,7 @@ package protobuffs;
 option go_package = "./;protobuffs";
 
 //go:generate protoc -I ./models/protobuffs --go_out=./models/protobuffs --go-grpc_out=require_unimplemented_servers=false:./models/protobuffs ./models/protobuffs/booking_request.proto
-service Booking {
+service Booker {
     rpc BookDvd (BookingRequest) returns (BookingResponse) {}
 }
 

@@ -19,87 +19,87 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	Booking_BookDvd_FullMethodName = "/protobuffs.Booking/BookDvd"
+	Booker_BookDvd_FullMethodName = "/protobuffs.Booker/BookDvd"
 )
 
-// BookingClient is the client API for Booking service.
+// BookerClient is the client API for Booker service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
-type BookingClient interface {
+type BookerClient interface {
 	BookDvd(ctx context.Context, in *BookingRequest, opts ...grpc.CallOption) (*BookingResponse, error)
 }
 
-type bookingClient struct {
+type bookerClient struct {
 	cc grpc.ClientConnInterface
 }
 
-func NewBookingClient(cc grpc.ClientConnInterface) BookingClient {
-	return &bookingClient{cc}
+func NewBookerClient(cc grpc.ClientConnInterface) BookerClient {
+	return &bookerClient{cc}
 }
 
-func (c *bookingClient) BookDvd(ctx context.Context, in *BookingRequest, opts ...grpc.CallOption) (*BookingResponse, error) {
+func (c *bookerClient) BookDvd(ctx context.Context, in *BookingRequest, opts ...grpc.CallOption) (*BookingResponse, error) {
 	out := new(BookingResponse)
-	err := c.cc.Invoke(ctx, Booking_BookDvd_FullMethodName, in, out, opts...)
+	err := c.cc.Invoke(ctx, Booker_BookDvd_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-// BookingServer is the server API for Booking service.
-// All implementations should embed UnimplementedBookingServer
+// BookerServer is the server API for Booker service.
+// All implementations should embed UnimplementedBookerServer
 // for forward compatibility
-type BookingServer interface {
+type BookerServer interface {
 	BookDvd(context.Context, *BookingRequest) (*BookingResponse, error)
 }
 
-// UnimplementedBookingServer should be embedded to have forward compatible implementations.
-type UnimplementedBookingServer struct {
+// UnimplementedBookerServer should be embedded to have forward compatible implementations.
+type UnimplementedBookerServer struct {
 }
 
-func (UnimplementedBookingServer) BookDvd(context.Context, *BookingRequest) (*BookingResponse, error) {
+func (UnimplementedBookerServer) BookDvd(context.Context, *BookingRequest) (*BookingResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method BookDvd not implemented")
 }
 
-// UnsafeBookingServer may be embedded to opt out of forward compatibility for this service.
-// Use of this interface is not recommended, as added methods to BookingServer will
+// UnsafeBookerServer may be embedded to opt out of forward compatibility for this service.
+// Use of this interface is not recommended, as added methods to BookerServer will
 // result in compilation errors.
-type UnsafeBookingServer interface {
-	mustEmbedUnimplementedBookingServer()
+type UnsafeBookerServer interface {
+	mustEmbedUnimplementedBookerServer()
 }
 
-func RegisterBookingServer(s grpc.ServiceRegistrar, srv BookingServer) {
-	s.RegisterService(&Booking_ServiceDesc, srv)
+func RegisterBookerServer(s grpc.ServiceRegistrar, srv BookerServer) {
+	s.RegisterService(&Booker_ServiceDesc, srv)
 }
 
-func _Booking_BookDvd_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Booker_BookDvd_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(BookingRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(BookingServer).BookDvd(ctx, in)
+		return srv.(BookerServer).BookDvd(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: Booking_BookDvd_FullMethodName,
+		FullMethod: Booker_BookDvd_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(BookingServer).BookDvd(ctx, req.(*BookingRequest))
+		return srv.(BookerServer).BookDvd(ctx, req.(*BookingRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-// Booking_ServiceDesc is the grpc.ServiceDesc for Booking service.
+// Booker_ServiceDesc is the grpc.ServiceDesc for Booker service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
-var Booking_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "protobuffs.Booking",
-	HandlerType: (*BookingServer)(nil),
+var Booker_ServiceDesc = grpc.ServiceDesc{
+	ServiceName: "protobuffs.Booker",
+	HandlerType: (*BookerServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
 			MethodName: "BookDvd",
-			Handler:    _Booking_BookDvd_Handler,
+			Handler:    _Booker_BookDvd_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

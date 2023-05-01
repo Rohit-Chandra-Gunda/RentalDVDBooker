@@ -27,7 +27,7 @@ func main() {
 }
 
 func RegisterGRPCServers(gRPCServer *grpc.Server) {
-	protobuffs.RegisterBookingServer(gRPCServer, &grpcservices.BookingService{})
+	protobuffs.RegisterBookerServer(gRPCServer, &grpcservices.BookingService{})
 	protobuffs.RegisterCancelBookingServer(gRPCServer, &grpcservices.CancelBookingService{})
 	protobuffs.RegisterUserBookingsServer(gRPCServer, &grpcservices.UserBookingsService{})
 	protobuffs.RegisterDvdBookingsServer(gRPCServer, &grpcservices.DvdBookingsService{})
