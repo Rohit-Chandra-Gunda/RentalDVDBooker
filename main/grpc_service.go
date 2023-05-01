@@ -1,7 +1,8 @@
 package main
 
 import (
-	"RentalDVDBooker/server"
+	grpcservices "RentalDVDBooker/models/grpcservices"
+	"RentalDVDBooker/models/protobuffs"
 	"fmt"
 	"net"
 
@@ -17,10 +18,17 @@ func main() {
 
 	grpcServer := grpc.NewServer()
 
-	server.RegisterGRPCServers(grpcServer)
+	RegisterGRPCServers(grpcServer)
 	serverErr := grpcServer.Serve(lis)
 
 	if serverErr != nil {
 		fmt.Println("Failed to serve:", serverErr)
 	}
+}
+
+func RegisterGRPCServers(gRPCServer *grpc.Server) {
+	protobuffs.RegisterBookingServer(gRPCServer, &grpcservices.BookingService{})
+	protobuffs.RegisterCancelBookingServer(gRPCServer, &grpcservices.CancelBookingService{})
+	protobuffs.RegisterUserBookingsServer(gRPCServer, &grpcservices.UserBookingsService{})
+	protobuffs.RegisterDvdBookingsServer(gRPCServer, &grpcservices.DvdBookingsService{})
 }

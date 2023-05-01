@@ -2,7 +2,7 @@
 // versions:
 // - protoc-gen-go-grpc v1.3.0
 // - protoc             v4.22.2
-// source: cancelBooking.proto
+// source: cancel_booking.proto
 
 package protobuffs
 
@@ -47,13 +47,13 @@ func (c *cancelBookingClient) CancelBooking(ctx context.Context, in *CancelReque
 }
 
 // CancelBookingServer is the server API for CancelBooking service.
-// All implementations must embed UnimplementedCancelBookingServer
+// All implementations should embed UnimplementedCancelBookingServer
 // for forward compatibility
 type CancelBookingServer interface {
 	CancelBooking(context.Context, *CancelRequest) (*CancelResponse, error)
 }
 
-// UnimplementedCancelBookingServer must be embedded to have forward compatible implementations.
+// UnimplementedCancelBookingServer should be embedded to have forward compatible implementations.
 type UnimplementedCancelBookingServer struct {
 }
 
@@ -103,5 +103,5 @@ var CancelBooking_ServiceDesc = grpc.ServiceDesc{
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "cancelBooking.proto",
+	Metadata: "cancel_booking.proto",
 }

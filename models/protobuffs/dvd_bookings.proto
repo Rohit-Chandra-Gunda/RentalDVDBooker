@@ -1,0 +1,19 @@
+syntax = "proto3";
+package protobuffs;
+option go_package = "./;protobuffs";
+
+import "booking.proto";
+
+service DvdBookings {
+    rpc GetDvdBookings (DvdBookingsRequest) returns (DvdBookingsResponse) {}
+}
+
+message DvdBookingsRequest {
+    uint64 dvdId = 1;
+    bool status = 2;
+}
+
+message DvdBookingsResponse {
+    repeated Booking bookings = 1;
+    string ErrorMsg = 2;
+}

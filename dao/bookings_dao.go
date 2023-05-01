@@ -15,31 +15,50 @@ var bookingList = []*models.Booking{
 
 var nextBookingId uint64 = 5
 
-func GetUserBookings(userId uint64) ([]*models.Booking, error) {
+func GetUserBookings(userId uint64, status bool) ([]models.Booking, error) {
 	if isActive, err := IsActiveUser(userId); !isActive {
-		return []*models.Booking{}, err
+		return []models.Booking{}, err
 	}
 
-	userBookings := []*models.Booking{}
+	userBookings := []models.Booking{}
 
 	for _, booking := range bookingList {
-		if booking.UserId == userId && booking.Status {
-			userBookings = append(userBookings, booking)
+		if booking.UserId == userId && booking.Status == status {
+			userBookings = append(userBookings, *booking)
 		}
 	}
 
 	return userBookings, nil
 }
 
+func GetDvdBookings(dvdId uint64, status bool) ([]models.Booking, error) {
+	if isActive, err := IsActiveUser(dvdId); !isActive {
+		return []models.Booking{}, err
+	}
+
+	dvdBookings := []models.Booking{}
+
+	for _, booking := range bookingList {
+		if booking.DvdId == dvdId && booking.Status == status {
+			dvdBookings = append(dvdBookings, *booking)
+		}
+	}
+
+	return dvdBookings, nil
+}
+
+func GetBookingFromId(bookingId uint64) (*models.Booking, error) {
+	for _, booking := range bookingList {
+		if booking.BookingId == bookingId {
+			return booking, nil
+		}
+	}
+
+	err := errors.New("No booking found with the id:" + strconv.FormatUint(bookingId, 10))
+	return nil, err
+}
+
 func GetBooking(userId, dvdId uint64) (*models.Booking, error) {
-	if isActive, err := IsActiveUser(userId); !isActive {
-		return nil, err
-	}
-
-	if isAvailable, err := IsDvdAvailable(dvdId); !isAvailable {
-		return nil, err
-	}
-
 	for _, booking := range bookingList {
 		if booking.UserId == userId && booking.DvdId == dvdId && booking.Status {
 			return booking, nil
@@ -73,13 +92,18 @@ func AddBooking(userId, dvdId uint64) (uint64, error) {
 	return bookingId, nil
 }
 
-func CancelBooking(userId, dvdId uint64) (uint64, error) {
-	booking, err := GetBooking(userId, dvdId)
+func CancelBooking(bookingId uint64) (bool, error) {
+	booking, err := GetBookingFromId(bookingId)
 
-	if err == nil {
-		booking.Status = false
-		return booking.BookingId, nil
-	} else {
-		return 0, err
+	if err != nil {
+		return false, nil
 	}
+
+	if !booking.Status {
+		err = errors.New("The booking with id:" + strconv.FormatUint(booking.BookingId, 10) + " is not active")
+		return false, nil
+	}
+
+	booking.Status = false
+	return true, nil
 }

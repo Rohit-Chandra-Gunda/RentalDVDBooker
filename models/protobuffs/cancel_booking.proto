@@ -1,17 +1,16 @@
 syntax = "proto3";
 package protobuffs;
 option go_package = "./;protobuffs";
-import "basicRequest.proto";
-import "basicResponse.proto";
 
 service CancelBooking {
     rpc CancelBooking (CancelRequest) returns (CancelResponse) {}
 }
 
 message CancelRequest {
-    BasicRequest basicRequest = 1;
+    uint64 bookingId = 1;
 }
 
 message CancelResponse {
-    BasicResponse basicResponse = 1;
+    bool success = 1;
+    string errorMsg = 2;
 }

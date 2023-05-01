@@ -1,0 +1,19 @@
+syntax = "proto3";
+package protobuffs;
+option go_package = "./;protobuffs";
+
+import "booking.proto";
+
+service UserBookings {
+    rpc GetUserBookings (UserBookingsRequest) returns (UserBookingsResponse) {}
+}
+
+message UserBookingsRequest {
+    uint64 userId = 1;
+    bool status = 2;
+}
+
+message UserBookingsResponse {
+    repeated Booking bookings = 1;
+    string ErrorMsg = 2;
+}

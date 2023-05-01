@@ -2,7 +2,8 @@ syntax = "proto3";
 package protobuffs;
 option go_package = "./;protobuffs";
 
-message BasicRequest {
+message Booking {
     uint64 userId = 1;
     uint64 dvdId = 2;
+    uint64 bookingId = 3;
 }
